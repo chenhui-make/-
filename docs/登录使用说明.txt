@@ -1,0 +1,49 @@
+用户登录与数据库管理
+
+1. 在 pgAdmin 中连接 RIGLAB，打开 Query Tool，执行 sql 目录中的 auth.sql。
+   原有用户表继续使用，新增 is_active 状态和 sessions 会话表。
+2. 在 PyCharm 的项目终端设置数据库环境变量：
+   $env:PGPASSWORD = '你的数据库密码'
+   默认连接 127.0.0.1:5432，数据库 RIGLAB，用户 postgres。
+   可以另设 PGHOST、PGPORT、PGDATABASE、PGUSER。
+3. 使用项目解释器创建新管理员：
+   .\.venv\Scripts\python.exe auth.py
+   按提示输入新账号和密码。同名账户会报错，请使用新账号。
+   重置已有账号密码：python auth.py --reset-password 用户名
+   按提示输入新密码两次。重置后旧会话失效，账号角色和启用状态保留。
+4. 启动：
+   .\.venv\Scripts\python.exe run.py
+   未设置 PGPASSWORD 时会提示输入数据库连接密码（输入时不显示字符）。
+   启动后应看到“数据库连接成功：RIGLAB”。连接失败会在终端提示并停止启动。
+   此入口配置 Windows 异步数据库连接所需的 SelectorEventLoop。
+   如果通过 Uvicorn 命令启动，使用：
+   python -m uvicorn main:app --reload --loop app.core.database:selector_loop_factory
+5. 打开 http://127.0.0.1:8000/ ，点击登录 / 注册，创建普通用户。
+   账号为 3–64 位字母、数字或下划线，密码为 8–128 位，昵称最多 20 位。
+   注册使用 11 位中国大陆手机号，不加 +86。登录时可使用手机号或已有账号。
+   注册时填写“确认密码”，前端和后端均要求两次密码一致。
+   登录框的“工作人员登录后台”入口验证管理员身份后自动跳转后台。
+6. 打开 http://127.0.0.1:8000/admin.html ，使用新建的管理员账号登录。
+   点击侧边栏底部“用户管理”，查看用户并启用或停用普通账户。
+   停用立即撤销该用户会话。管理员角色通过受信任的数据库或命令行流程维护。
+
+登录态使用 HttpOnly Cookie，有效期 4 小时，刷新页面通过后端验证。
+密码使用随机盐 scrypt 哈希，数据库会话保存 token 的 SHA-256 摘要。
+注册只创建普通用户。旧前台演示昵称需要重新注册。
+旧后台演示账号请使用新建管理员替代。
+
+数据库管理：
+riglab.users 保存账号、昵称、密码哈希、角色和启用状态。
+riglab.sessions 保存登录会话，可在 pgAdmin 删除某个用户的会话以强制退出。
+
+API：
+POST /api/auth/register   注册并登录
+POST /api/auth/login      登录
+POST /api/auth/staff-login 工作人员登录（仅管理员）
+GET  /api/auth/me         查询当前用户
+POST /api/auth/logout     退出并撤销会话
+GET  /api/admin/users     管理员查看用户
+PATCH /api/admin/users/{id}  启用或停用普通用户，JSON {"is_active": false}
+
+当前收藏和配件后台管理操作仍使用原有浏览器存储。
+用户管理 API 在服务器校验会话与角色，管理页面通过该 API 读写数据库。

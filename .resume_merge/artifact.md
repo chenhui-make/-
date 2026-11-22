@@ -1,0 +1,3 @@
+Reference: G:\项目—装机研究所\docs\马晨辉-微派数据分析实习简历-蓝色同款版.docx
+SHA256: 19c6bb79eae5c79f89a121126d359fa03aa57b91dbe930a6b437b4907f330ccd
+One A4 page, 7.2pt margins. Microsoft YaHei, gray 454545, 10pt body. Full-page blue header image preserved. Nine absolute VML text boxes. Slots 1-5 preserve personal and education data; slot 6 expand education/analysis interest; slots 7-9 rewrite project, skills, practice and strengths. Body text adjusted to 9.5pt/13.2pt leading for added content; source 10pt/17pt. Heading labels 3-5 covered by source-blue editable VML labels to match revised content. All package parts except word/document.xml preserve byte-for-byte. Reference rendered via Word PDF as bundled LibreOffice unavailable. Reference preview reference.png.

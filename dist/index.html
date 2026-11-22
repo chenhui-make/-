@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <script>
+            // 本地文件入口转到 FastAPI 服务，避免 file 协议下接口请求失败。
+            if (location.protocol === "file:") {
+                location.replace("http://127.0.0.1:8000/index.html");
+            }
+        </script>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>RIGLAB · 装机研究所</title>
+        <link rel="stylesheet" href="assets/builder/style.css?v=6" />
+        <link rel="stylesheet" href="assets/ai/ai.css" />
+    </head>
+    <body>
+        <header>
+            <a class="logo" href="#builder">
+                <span> ▧ </span>
+                RIGLAB
+                <i> 装机研究所</i>
+            </a>
+            <nav>
+                <a href="#builder"> 自选装机 </a>
+                <a href="#community"> 灵感社区 </a>
+                <a href="#favorites">
+                    我的收藏
+                    <b id="count"> 0 </b>
+                </a>
+            </nav>
+            <button class="login" id="account">登录 / 注册 ↗</button>
+        </header>
+        <main>
+            <section class="intro">
+                <div>
+                    <div class="eyebrow"><span> </span> BUILT BY YOU. MADE FOR YOU.</div>
+                    <h1>你的下一台电脑，<br />由你<span>定义。</span></h1>
+                    <p>从第一颗芯片到最后一束 RGB，让每一份预算都有意义。</p>
+                </div>
+                <div class="hero-art">
+                    <div class="orb"></div>
+                    <div class="tower">
+                        <div class="glass">
+                            <div class="fan f1"></div>
+                            <div class="fan f2"></div>
+                            <div class="fan f3"></div>
+                            <div class="gpu">GEFORCE RTX <b>━━</b></div>
+                            <div class="ram"></div>
+                        </div>
+                        <div class="front">
+                            <div class="fan"></div>
+                            <div class="fan"></div>
+                            <div class="fan"></div>
+                        </div>
+                    </div>
+                    <span class="art-label">YOUR VISION. YOUR BUILD. ↗</span>
+                </div>
+                <div class="intro-side">
+                    自由搭配 / 即刻创造<br /><strong>13</strong> 类精选硬件
+                </div>
+            </section>
+            <section id="workspace">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">THE BUILD STUDIO</span>
+                        <h2 id="pageTitle">开始你的专属配置 <span>↘</span></h2>
+                    </div>
+                    <div class="subtabs">
+                        <button data-mode="custom" class="active">自由搭配</button
+                        ><button data-mode="gaming">游戏玩家</button
+                        ><button data-mode="creator">创意生产力</button>
+                    </div>
+                </div>
+                <div id="builderView">
+                    <div class="categories" role="group" aria-label="配件分类">
+                        <div id="categories"></div>
+                    </div>
+                    <div class="studio">
+                        <section class="catalog">
+                            <div class="catalog-top">
+                                <div>
+                                    <h3 id="catTitle">处理器 CPU</h3>
+                                    <p id="catDesc">每一次流畅体验，都从核心开始。</p>
+                                </div>
+                                <span class="step" id="step"></span>
+                            </div>
+                            <div class="filters">
+                                <label class="search"
+                                    >⌕
+                                    <input
+                                        id="search"
+                                        placeholder="搜索品牌、型号或关键词…" /></label
+                                ><select id="sort" aria-label="价格排序">
+                                    <option value="default">推荐排序</option>
+                                    <option value="asc">价格从低到高</option>
+                                    <option value="desc">价格从高到低</option>
+                                </select>
+                            </div>
+                            <div class="brand-filters" id="brands"></div>
+                            <div id="products" class="products"></div>
+                            <div class="catalog-note">
+                                ⓘ 价格为演示参考价，兼容性提示仅涵盖基础规则。
+                            </div>
+                        </section>
+                        <aside class="summary">
+                            <div class="summary-head">
+                                <h3>我的配置单 <span>↗</span></h3>
+                                <input
+                                    id="buildName"
+                                    aria-label="配置名称"
+                                    maxlength="40"
+                                    value="我的梦想主机"
+                                />
+                            </div>
+                            <div class="budget-row">
+                                <span>目标预算</span
+                                ><div class="budget-controls"><label
+                                    >¥
+                                    <input
+                                        id="budget"
+                                        type="number"
+                                        min="1"
+                                        value="12000"
+                                        aria-label="目标预算"
+                                /></label>
+                                <button id="decreaseBudget" type="button" aria-label="预算减少 500 元">−500</button>
+                                <button id="increaseBudget" type="button" aria-label="预算增加 500 元">+500</button></div>
+                            </div>
+                            <div class="progress"><i id="budgetBar"></i></div>
+                            <div class="budget-meta">
+                                <span id="budgetText"></span><b id="selectedCount"></b>
+                            </div>
+                            <div id="selection"></div>
+                            <div id="compat" class="compat"></div>
+                            <div class="total">
+                                <span>配置预估总价<small>人民币 / CNY</small></span
+                                ><strong id="total"></strong>
+                            </div>
+                            <button class="primary" id="save">♡ 收藏这套配置 <span>↗</span></button>
+                            <div class="summary-actions">
+                                <button id="purchase">↗ 查看购买链接</button><button id="export">↓ 导出清单</button
+                                ><button id="reset">↺ 重新搭配</button>
+                            </div>
+                            <div class="local-note">配置自动保存在当前浏览器</div>
+                        </aside>
+                    </div>
+                </div>
+                <div id="cardsView" hidden></div>
+            </section>
+            <section class="bottom-banner">
+                <div>
+                    <span>NEED A LITTLE INSPIRATION?</span>
+                    <h3>好配置，值得被看见。</h3>
+                    <p>看看其他玩家如何平衡性能、预算与颜值。</p>
+                </div>
+                <a href="#community">探索灵感社区 ↗</a>
+                <div class="banner-grid">▦</div>
+            </section>
+        </main>
+        <footer>
+            <span class="logo">▧ RIGLAB</span><span>为每一份热爱，找到合适的硬件。</span
+            ><small><a href="admin.html">后台管理 ↗</a> · 前端概念演示</small>
+        </footer>
+        <dialog id="modal">
+            <button class="close" aria-label="关闭">×</button>
+            <div id="modalContent"></div>
+        </dialog>
+        <div id="toast" role="status"></div>
+        <script src="assets/shared/catalog-data.js"></script>
+        <script src="assets/shared/store.js"></script>
+        <script src="assets/auth/auth-client.js"></script>
+        <script src="assets/builder/app.js?v=6"></script>
+        <script src="assets/ai/ai-ui.js?v=8"></script>
+        <script src="assets/shared/tracking.js"></script>
+    </body>
+</html>

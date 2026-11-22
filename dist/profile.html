@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>个人中心 · 装机研究所</title>
+        <link rel="stylesheet" href="assets/builder/style.css?v=6" />
+        <script defer src="assets/auth/auth-client.js"></script>
+        <script defer src="assets/auth/profile.js?v=2"></script>
+    </head>
+    <body>
+        <header>
+            <a class="logo" href="/"><span>▧</span> RIGLAB <i>装机研究所</i></a>
+            <a class="login" href="/#builder">返回装机 ↗</a>
+        </header>
+        <main>
+            <div class="section-heading"><h2>个人中心</h2></div>
+            <section class="profile-card" aria-label="账号信息">
+                <p id="profileStatus" role="status">正在读取账号信息…</p>
+                <div id="profileDetails" hidden>
+                    <div class="profile-identity">
+                        <img class="user-avatar" id="avatarImage" alt="" hidden />
+                        <span class="user-avatar" id="avatarInitial" aria-hidden="true" hidden></span>
+                        <div><h3 id="profileName"></h3><p id="profileAccount"></p></div>
+                    </div>
+                    <div class="profile-settings">
+                        <details>
+                            <summary>个人设置 <small>编辑昵称</small></summary>
+                            <form id="nicknameForm">
+                                <label>昵称 <input name="nickname" required maxlength="20" autocomplete="nickname" /></label>
+                                <button class="primary" type="submit">保存昵称</button>
+                                <p role="status"></p>
+                            </form>
+                        </details>
+                        <details>
+                            <summary>账号安全 <small>修改登录密码</small></summary>
+                            <form id="passwordForm">
+                                <label>当前密码 <input name="current_password" type="password" required minlength="8" maxlength="128" autocomplete="current-password" /></label>
+                                <label>新密码 <input name="new_password" type="password" required minlength="8" maxlength="128" autocomplete="new-password" /></label>
+                                <label>确认新密码 <input name="confirm_password" type="password" required minlength="8" maxlength="128" autocomplete="new-password" /></label>
+                                <button class="primary" type="submit">更新密码</button>
+                                <p role="status"></p>
+                            </form>
+                        </details>
+                        <details>
+                            <summary>隐私设置 <small>管理 AI 对话记忆</small></summary>
+                            <form id="privacyForm">
+                                <label><input name="ai_memory_enabled" type="checkbox" /> 启用 AI 对话记忆</label>
+                                <p>关闭后，后续请求会停止保存和引用历史问答。已有记录会保留，重新开启后可继续使用。</p>
+                                <button class="primary" type="submit">保存隐私设置</button>
+                                <p role="status"></p>
+                            </form>
+                        </details>
+                        <a class="profile-row" href="/#favorites">我的收藏 <small>查看已收藏的配置 ↗</small></a>
+                        <a class="profile-row" id="profileAdmin" href="/admin.html" hidden>后台管理 <small>进入管理页面 ↗</small></a>
+                        <button class="profile-row" id="logout" type="button">退出登录</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+</html>

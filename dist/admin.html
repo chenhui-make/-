@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <script>
+            // 本地文件入口转到 FastAPI 服务，避免 file 协议下接口请求失败。
+            if (location.protocol === "file:") {
+                location.replace("http://127.0.0.1:8000/admin.html");
+            }
+        </script>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>RIGLAB · 管理控制台</title>
+        <link rel="stylesheet" href="assets/admin/admin.css" />
+    </head>
+    <body>
+        <section id="loginPage" class="auth-layout">
+            <div class="auth-brand">
+                <a class="brand" href="index.html"><b>▧</b> RIGLAB <small>ADMIN</small></a>
+                <div class="auth-copy">
+                    <div class="eyebrow">BEHIND EVERY GREAT BUILD.</div>
+                    <h1>让每一份搭配，<br />都有更好的可能。</h1>
+                    <p>硬件、数据与灵感，<br />在同一个工作台井然有序。</p>
+                    <div class="abstract">
+                        <span>▧</span>
+                        <i></i>
+                        <b>CONTROL / CONNECT / CREATE</b>
+                    </div>
+                </div>
+                <small>装机研究所 · 管理员工作空间</small>
+            </div>
+            <div class="auth-form">
+                <div class="auth-card">
+                    <div class="eyebrow">ADMIN WORKSPACE</div>
+                    <h2>登录管理控制台 <span>↗</span></h2>
+                    <p class="muted">使用后台人员账户，开始今天的管理工作。</p>
+                    <form id="loginForm" method="post" onsubmit="return false;">
+                        <label>
+                            管理员账号
+                            <input
+                                name="account"
+                                placeholder="请输入管理员账号"
+                                autocomplete="username"
+                                required
+                            />
+                        </label>
+                        <label>
+                            密码
+                            <input
+                                name="password"
+                                type="password"
+                                placeholder="请输入密码"
+                                autocomplete="current-password"
+                                required
+                            />
+                        </label>
+                        <p id="loginError" class="error" role="alert"></p>
+                        <button class="primary" type="submit">登录控制台 <span>→</span></button>
+                    </form>
+                    <div class="demo-note">
+                        <b>管理员账户</b>
+                        <p>使用已创建的数据库管理员账户登录。</p>
+                    </div>
+                    <a href="index.html" class="back-link">← 返回装机前台</a>
+                </div>
+            </div>
+        </section>
+        <div id="adminApp" hidden>
+            <aside class="sidebar">
+                <a class="brand" href="index.html"><b>▧</b> RIGLAB <small>ADMIN</small></a>
+                <div class="nav-label">工作空间 / WORKSPACE</div>
+                <nav>
+                    <button data-page="overview">◫ <span>数据概览</span></button>
+                    <button data-page="models">▧ <span>型号管理</span><b id="navCount"></b></button>
+                    <button data-page="visits">◷ <span>访问记录</span></button>
+                    <button data-page="usage">▥ <span>配件选用分析</span></button>
+                </nav>
+                <div class="sidebar-tip">
+                    <span>✧</span>
+                    <b>每一份数据，都有价值</b>
+                    <p>了解玩家的选择，<br />打造更好的装机体验。</p>
+                </div>
+                <div class="sidebar-bottom">
+                    <a href="index.html">↗ 打开装机前台</a>
+                    <div class="profile">
+                        <span class="avatar">A</span>
+                        <div>
+                            <b>Administrator</b>
+                            <small>后台管理员 · 演示</small>
+                        </div>
+                        <button id="logout" title="退出登录" aria-label="退出登录">⇥</button>
+                    </div>
+                </div>
+            </aside>
+            <div class="admin-main">
+                <header>
+                    <div>
+                        工作空间
+                        <span>/</span>
+                        <b id="breadcrumb">数据概览</b>
+                    </div>
+                    <div class="header-right">
+                        <span class="status-dot"></span>
+                        本地演示环境
+                        <span class="avatar small">A</span>
+                    </div>
+                </header>
+                <main>
+                    <div class="page-heading">
+                        <div>
+                            <div class="eyebrow" id="pageEnglish">WORKSPACE OVERVIEW</div>
+                            <h1 id="pageTitle">数据概览 <span>↘</span></h1>
+                            <p id="pageSubtitle">你好，管理员。这里是装机研究所的运行概况。</p>
+                        </div>
+                        <div class="heading-actions">
+                            <select id="range" aria-label="统计时间范围">
+                                <option value="7">最近 7 天</option>
+                                <option value="30">最近 30 天</option>
+                            </select>
+                            <button class="outline" id="export">↓ 导出数据</button>
+                        </div>
+                    </div>
+                    <div class="data-notice">
+                        <span>◉</span>
+                        <b>演示数据空间</b>
+                        <span
+                            >示例记录与当前浏览器记录分开标注；统计不代表网站真实流量。“使用程度”指配件被选入配置的次数。</span
+                        >
+                    </div>
+                    <div id="content"></div>
+                    <footer>
+                        RIGLAB ADMIN
+                        <span>用数据，让热爱更有方向。</span>
+                        <small>纯前端演示 · 数据保存在当前浏览器</small>
+                    </footer>
+                </main>
+            </div>
+        </div>
+        <dialog id="editor">
+            <div class="dialog-head">
+                <div>
+                    <div class="eyebrow">COMPONENT LIBRARY</div>
+                    <h2 id="editorTitle">添加配件型号</h2>
+                </div>
+                <button id="closeEditor" aria-label="关闭">×</button>
+            </div>
+            <form id="modelForm">
+                <input name="id" type="hidden" />
+                <div class="form-grid">
+                    <label>
+                        配件分类
+                        <select name="category" required></select>
+                    </label>
+                    <label>
+                        品牌
+                        <input name="brand" required maxlength="40" placeholder="例如 Intel" />
+                    </label>
+                    <label class="full">
+                        型号名称
+                        <input
+                            name="name"
+                            required
+                            maxlength="100"
+                            placeholder="例如 Core i5-14600KF"
+                        />
+                    </label>
+                    <label>
+                        参考价格（元）
+                        <input
+                            name="price"
+                            type="number"
+                            min="1"
+                            max="999999"
+                            step="0.01"
+                            required
+                        />
+                    </label>
+                    <label>
+                        上架状态
+                        <select name="status">
+                            <option value="active">已上架</option>
+                            <option value="inactive">已下架</option>
+                        </select>
+                    </label>
+                    <label class="full">
+                        规格描述
+                        <input
+                            name="spec"
+                            required
+                            maxlength="200"
+                            placeholder="核心数、频率、容量等"
+                        />
+                    </label>
+                    <label class="full">购买链接<input name="purchase_url" type="url" required maxlength="2048" placeholder="https://item.jd.com/… 或对应型号搜索链接" /></label>
+                    <label>链接类型<select name="purchase_kind"><option value="search">商城搜索结果</option><option value="product">商品详情页</option></select></label>
+                    <label data-field="socket">
+                        CPU / 主板插槽
+                        <select name="socket">
+                            <option value="">不适用</option>
+                            <option>LGA1700</option><option>LGA1851</option><option>AM4</option>
+                            <option>AM5</option>
+                        </select>
+                    </label>
+                    <label data-field="ddr">
+                        内存代际
+                        <select name="ddr">
+                            <option value="">不适用</option>
+                            <option>DDR4</option>
+                            <option>DDR5</option>
+                        </select>
+                    </label>
+                    <label data-field="power">
+                        CPU / 显卡功耗（W）
+                        <input name="power" type="number" min="1" max="2000" />
+                    </label>
+                    <label data-field="watts">
+                        电源额定功率（W）
+                        <input name="watts" type="number" min="1" max="3000" />
+                    </label>
+                </div>
+                <p class="muted">修改保存到数据库；前台页面刷新后可看到已上架型号。</p>
+                <p id="formError" class="error" role="alert"></p>
+                <button class="primary" type="submit">保存型号 <span>✓</span></button>
+            </form>
+        </dialog>
+        <dialog id="confirm">
+            <h2>确认下架型号？</h2>
+            <p>下架后，前台刷新将不再展示该型号。你可以随时重新上架。</p>
+            <div class="confirm-actions">
+                <button class="outline" id="cancelToggle">取消</button>
+                <button class="primary" id="confirmToggle">确认下架</button>
+            </div>
+        </dialog>
+        <div id="toast" role="status"></div>
+        <script src="assets/shared/catalog-data.js"></script>
+        <script src="assets/shared/store.js"></script>
+        <script src="assets/auth/auth-client.js"></script>
+        <script src="assets/admin/admin.js"></script>
+    </body>
+</html>

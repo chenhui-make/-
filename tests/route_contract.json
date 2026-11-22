@@ -1,0 +1,21 @@
+[
+  "router.get('/admin/users')",
+  "router.get('/auth/me')",
+  "router.patch('/auth/profile', dependencies=[Depends(same_origin)])",
+  "router.put('/auth/password', dependencies=[Depends(same_origin)])",
+  "router.patch('/admin/users/{user_id}', dependencies=[Depends(same_origin)])",
+  "router.post('/auth/login', dependencies=[Depends(same_origin)])",
+  "router.post('/auth/logout', dependencies=[Depends(same_origin)])",
+  "router.post('/auth/register', status_code=201, dependencies=[Depends(same_origin)])",
+  "router.post('/auth/staff-login', dependencies=[Depends(same_origin)])",
+  "router.get('/admin/ai-settings', dependencies=[Depends(administrator)])",
+  "router.get('/ai/status')",
+  "router.post('/admin/ai-test', dependencies=[Depends(same_origin)])",
+  "router.post('/ai/recommend', dependencies=[Depends(same_origin)])",
+  "router.post('/ai/review', dependencies=[Depends(same_origin)])",
+  "router.post('/ai/validate', dependencies=[Depends(same_origin), Depends(current_user)])",
+  "router.put('/admin/ai-settings', dependencies=[Depends(administrator), Depends(same_origin)])",
+  "app.get('/api/parts')",
+  "app.get('/api/admin/parts', dependencies=[Depends(administrator)])",
+  "app.put('/api/admin/parts/{part_id}', dependencies=[Depends(administrator), Depends(same_origin)])"
+]

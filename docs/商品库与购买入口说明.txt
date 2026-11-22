@@ -1,0 +1,47 @@
+商品库与购买入口说明（2026-11-08）
+
+当前数据库：130款上架商品，主机八类120款，原有外设10款。
+CPU 26，显卡16，主板18，SSD 15，内存12，散热9，电源11，机箱13。
+新增目录 data/popular_parts.json 包含102个候选型号；与现有型号去重后实际新增97款。
+该目录是主流型号选集，并非销量排行榜或市场全量数据库。
+
+购买入口：
+1. 配置栏点击“查看购买链接”，展示当前选中配件的独立跳转入口。
+2. 手动选齐八类主机配件、应用AI配置后自动弹出清单。
+3. 导出清单同时包含购买链接。
+4. 新增商品和现有商品默认使用精确型号京东搜索链接，非已核实店铺的单品直链。
+5. 管理员可编辑购买链接，并选择“商城搜索结果”或“商品详情页”。链接要求HTTPS。
+6. 商品管理已接通PostgreSQL；旧浏览器中的本地编辑不会自动导入数据库。
+7. 价格是预算参考值，不是2026年11月实时成交价；库存、容量、版本与店铺以商城为准。
+8. 插槽和DDR、电源功率用于基础筛选，仍需核对BIOS、散热扣具、机箱限高与显卡长度。
+
+安装/迁移：
+新环境先执行 sql/database.sql 和 sql/auth.sql，再运行：
+.venv\Scripts\python.exe sql\expand_catalog.py
+脚本在事务中运行，可重复执行，保留已有型号价格、状态和非空链接。
+如服务未自动重载，请重新运行 python run.py，浏览器刷新页面。
+
+来源与核对依据：
+热门配置参考（不能据此推断中国市场销量覆盖率）：
+https://quasarzone.com/bbs/qn_partner/views/2157898
+https://msigaming.jd.com/
+处理器系列：
+https://www.amd.com/en/products/processors/desktops/ryzen.html
+https://newsroom.amd.com/news/amd-expands-ai-leadership-across-client-graphics/
+显卡系列和规格：
+https://www.nvidia.com/en-gb/geforce/graphics-cards/compare/
+https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9060xt.html
+https://ir.amd.com/news-events/press-releases/detail/1238/amd-unveils-next-generation-amd-rdna-4-architecture-with-the-launch-of-amd-radeon-rx-9000-series-graphics-cards
+主板：
+https://storage-asset.msi.com/datasheet/mb/tw/B860-GAMING-PLUS-WIFI.pdf
+SSD：
+https://semiconductor.samsung.com/consumer-storage/support/documents/
+内存：
+https://www.kingston.com/datasheets/KF560C30BBEA-16.pdf
+电源与机箱：
+https://www.corsair.com/us/en/p/psu/cp-9020296-na/rme-series-rm850e-fully-modular-low-noise-atx-power-supply-cp-9020296-na
+https://help.corsair.com/hc/en-us/articles/360047191592-Cases-CORSAIR-mid-tower-cases
+
+验证：tests/check_structure.py，tests/check_purchase.py，JavaScript语法检查通过。
+购买测试覆盖真实数据库读取、商品新增和修改（测试写入回滚）、权限和不安全链接拒绝。
+原有check_ai.py/check_auth.py要求专用测试数据库；未在用户业务库执行其写入测试。

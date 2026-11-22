@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>AI 服务配置 · 装机研究所</title>
+        <style>
+            body {
+                font: 15px system-ui;
+                background: #f5f8f0;
+                color: #2e3c25;
+                margin: 0;
+            }
+            main {
+                max-width: 680px;
+                margin: 40px auto;
+                background: white;
+                border: 1px solid #dde5d2;
+                border-radius: 14px;
+                padding: 30px;
+            }
+            label {
+                display: block;
+                margin-top: 20px;
+            }
+            input:not([type="checkbox"]) {
+                display: block;
+                box-sizing: border-box;
+                width: 100%;
+                padding: 12px;
+                margin-top: 8px;
+                border: 1px solid #ced8c3;
+                border-radius: 7px;
+                font: inherit;
+            }
+            button {
+                padding: 12px 20px;
+                margin: 22px 12px 0 0;
+                border: 0;
+                border-radius: 7px;
+                background: #c9ed82;
+                cursor: pointer;
+            }
+            button:disabled {
+                opacity: 0.5;
+                cursor: wait;
+            }
+            p {
+                line-height: 1.8;
+            }
+            #message {
+                white-space: pre-wrap;
+            }
+            @media (max-width: 650px) {
+                main {
+                    margin: 16px;
+                    padding: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <a href="/admin.html">← 返回后台</a>
+            <h1>AI 服务配置</h1>
+            <p>
+                支持提供 Chat Completions 和 JSON
+                输出的兼容服务。填写服务商提供的模型名称和基础地址，程序会在地址后拼接
+                /chat/completions。
+            </p>
+            <form id="settings" hidden>
+                <label><input id="enabled" type="checkbox" />启用 AI 助手</label>
+                <label
+                    >服务基础地址<input
+                        id="baseUrl"
+                        type="url"
+                        placeholder="例如 https://api.deepseek.com"
+                        maxlength="500"
+                /></label>
+                <label
+                    >模型名称<input
+                        id="model"
+                        placeholder="填写服务商提供的模型 ID"
+                        maxlength="100"
+                /></label>
+                <label
+                    >API 密钥<input
+                        id="apiKey"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="输入新密钥；留空保留已保存密钥"
+                /></label>
+                <p id="keyState"></p>
+                <p>
+                    用途描述、预算和配件规格会发送给所配置的服务。密钥保存在本机后端
+                    .local/ai-settings.json 文件中。
+                </p>
+                <button type="submit">保存配置</button>
+                <button type="button" id="test">测试已保存的配置</button>
+            </form>
+            <p id="message" role="status" aria-live="polite">正在验证管理员身份…</p>
+        </main>
+        <script src="assets/auth/auth-client.js"></script>
+        <script src="assets/ai/ai-settings.js"></script>
+    </body>
+</html>
